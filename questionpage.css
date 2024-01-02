@@ -1,0 +1,23 @@
+*{
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+body{
+    text-align: center;
+    background: #1E1A5F;
+}
+.questionBox{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.contentBox{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #4E4C81;
+    width: 50%;
+}
