@@ -10,10 +10,10 @@
     <div class="main_container">
         <h1>YAYY! You've Completed The QUIZ.</h1>
         <h2 id="username">Name</h2>
-        <h3 id="total_score">Total Score : <span>0 / 5</span> </h3>
-        <h3>Right Answer : <span>0 / 5</span></h3>
-        <h3>Wrong Answe : <span>0 / 5</span></h3>
-        <h3>Total Percent : <span> 0% </span></h3>
+        <h3>Total Score : <span id="total_score">0 / 5</span> </h3>
+        <h3>Right Answer : <span id="right_answer">0 / 5</span></h3>
+        <h3>Wrong Answe : <span id="wrong_answer">0 / 5</span></h3>
+        <h3>Total Percent : <span id="total_percent"> 0% </span></h3>
         <!-- Button to go back -->
         <div class="btns">
             <button onclick="goToHomePage()" type="reset">HOME</button>
@@ -22,6 +22,44 @@
 
     </div>
 
-    <script src="script.js"></script>
+    <script src="index.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+  displayResult();
+});
+
+function displayResult() {
+  // Get the saved details from localStorage
+  const username = localStorage.getItem("username");
+  const totalScore = localStorage.getItem("totalScore");
+  const totalQuestions = 10; // Assuming a total of 10 questions
+  const rightAnswers = parseInt(localStorage.getItem("score")) || 0;
+  const wrongAnswers = totalQuestions - rightAnswers;
+  const totalPercent = (rightAnswers / totalQuestions) * 100;
+
+  // Display the details in the HTML elements
+  const usernameElement = document.getElementById("username");
+  const totalScoreElement = document.getElementById("total_score");
+  const rightAnswerElement = document.getElementById("right_answer");
+  const wrongAnswerElement = document.getElementById("wrong_answer");
+  const totalPercentElement = document.getElementById("total_percent");
+
+  usernameElement.innerText = `Name: ${username}`;
+  totalScoreElement.innerText = `Total Score: ${totalScore} / ${totalQuestions}`;
+  rightAnswerElement.innerText = `Right Answers: ${rightAnswers} / ${totalQuestions}`;
+  wrongAnswerElement.innerText = `Wrong Answers: ${wrongAnswers} / ${totalQuestions}`;
+  totalPercentElement.innerText = `Total Percent: ${totalPercent.toFixed(2)}%`;
+}
+
+function goToHomePage() {
+  window.location.href = "index.html";
+}
+
+function startQuiz() {
+  // Redirect the user to the quiz page to retake the quiz
+  window.location.href = "questions.html";
+}
+
+    </script>
 </body>
 </html>

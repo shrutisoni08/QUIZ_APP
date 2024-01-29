@@ -1,3 +1,16 @@
+document.addEventListener("DOMContentLoaded", function () {
+  initializeQuiz();
+});
+function initializeQuiz() {
+  loadQuestionsPage();
+}
+
+let username = localStorage.getItem("username");
+let category = localStorage.getItem("category");
+
+if (!username || !category) {
+  window.location.href = "index.html";
+}
 
 const questions = {
   HTML: [
@@ -26,7 +39,7 @@ const questions = {
     {
       question: "How do you add a comment in HTML?",
       options: [
-        "Using <!-- -->",
+        "Using <-- -->",
         "Using <!-- -->",
         "Using <-- >",
         "None of the above",
@@ -54,17 +67,17 @@ const questions = {
       correctAnswer: "Safari",
     },
     {
-      questions: "Which of these refers to HTML 4.0?",
+      question: "Which of these refers to HTML 4.0?",
       options: ["Wilbur", "Frameset", "Strict", "HTML Rattle"],
       correctAnswer: "Frameset",
     },
     {
-      questions: "Which of these is not assoiciated with HTML?",
+      question: "Which of these is not assoiciated with HTML?",
       options: ["CSS", "JavaScript", "PHP", "Ruby on Rails"],
       correctAnswer: "Ruby on Rails",
     },
     {
-      questions: "Which of these cannot be manipulated by HTML",
+      question: "Which of these cannot be manipulated by HTML",
       options: [
         "Site cookies",
         "Browser security",
@@ -87,18 +100,18 @@ const questions = {
       correctAnswer: "Cascading Style Sheet",
     },
     {
-      questions:
+      question:
         "Which of the following is the correct styntax to add the external stylesheet in CSS?",
       options: [
-        "<style src = QuizBuzz.css>",
+        '<style src = QuizBuzz.css>',
         '<style src = "QuizBuzz.css">',
-        "<stylesheet>QuizBuzz.css</stylesheet>",
+        '<stylesheet>QuizBuzz.css</stylesheet>',
         '<link rel="stylesheet" type="quiz/css" href="QuizBuzz.css">',
       ],
       correctAnswer: `<link rel="stylesheet" type="quiz/css" href="QuizBuzz.css"> `,
     },
     {
-      questions:
+      question:
         "Which of the below CSS properties is used to change the background color of CSS?",
       options: [
         "bg color",
@@ -109,18 +122,18 @@ const questions = {
       correctAnswer: "background-color",
     },
     {
-      questions: "What is the syntax for using font family in CSS?",
+      question: "What is the syntax for using font family in CSS?",
       options: ["font(family)", "font-family()", "font_family", "fontFamily()"],
       correctAnswer: "font-family()",
     },
     {
-      questions:
+      question:
         "Which element is used to represent the transparency of an element in CSS?",
       options: ["Z-index", "Opacity", "Overflow", "Overlay"],
       correctAnswer: "Opacity",
     },
     {
-      questions: "How do you select all paragraphs in CSS?",
+      question: "How do you select all paragraphs in CSS?",
       options: [
         "p {}",
         ".paragraph {}",
@@ -130,13 +143,13 @@ const questions = {
       correctAnswer: "p {}",
     },
     {
-      questions:
+      question:
         "Which below function in CSS is used to perform the calculation?",
       options: ["cal()", "calculator()", "calc()", "Calculate()"],
       correctAnswer: "calc()",
     },
     {
-      questions:
+      question:
         "Which of the below CSS property is used to set the origin of the background image in bootstraps",
       options: [
         "background-image",
@@ -147,7 +160,7 @@ const questions = {
       correctAnswer: "background-origin",
     },
     {
-      questions: "What are units used for length measurement in CSS?",
+      question: "What are units used for length measurement in CSS?",
       options: [
         "px (Pixels)",
         "% (Percentage)",
@@ -157,7 +170,7 @@ const questions = {
       correctAnswer: "cm (Centimeters)",
     },
     {
-      questions:
+      question:
         "CSS supports which of the following color representation formats?",
       options: [
         "RGB(0,0,0)",
@@ -176,7 +189,7 @@ const questions = {
       correctAnswer: "=",
     },
     {
-      questions: 'How do you write "Hello World! in an alert box?"',
+      question: 'How do you write "Hello World! in an alert box?"',
       options: [
         `alert("Hello World!");`,
         `console.log("Hello World!");`,
@@ -186,18 +199,18 @@ const questions = {
       correctAnswer: `alert("Hello World!");`,
     },
     {
-      questions: "JavaScript file has an extenstion of:",
+      question: "JavaScript file has an extenstion of:",
       options: [".java", ".js", ".javaScript", ".jxml"],
       correctAnswer: ".js",
     },
     {
-      questions:
+      question:
         "Which statement connot be used to declare a variable in JavaScript",
       options: ["var", "let", "const", "int"],
       correctAnswer: "int",
     },
     {
-      questions: "What does JSON stand for",
+      question: "What does JSON stand for",
       options: [
         "Javascript Object Notation",
         "Java Object Notation",
@@ -207,27 +220,27 @@ const questions = {
       checkAnswer: "Javascript Object Notation",
     },
     {
-      questions: 'What is the value of x? var x = typeof "abc"',
+      question: 'What is the value of x? var x = typeof "abc"',
       options: ["string", "x = Abc", "abc", "Undefined"],
       correctAnswer: "string",
     },
     {
-      questions: "To convert string to number, which function do we use?",
+      question: "To convert string to number, which function do we use?",
       options: ["parseNumber()", "ParseDouble()", "ParseValue()", "parseInt()"],
       correctAnswer: "parseInt()",
     },
     {
-      questions: "Which of these is not a logical operator",
+      question: "Which of these is not a logical operator",
       options: ["!", "||", "&", "&&"],
       correctAnswer: "&",
     },
     {
-      questions: "What is the output of console.log(3 > 5) ?",
+      question: "What is the output of console.log(3 > 5) ?",
       options: ["true", "false", "undefined", "null"],
       correctAnswer: "false",
     },
     {
-      questions: "How to declare a string variable",
+      question: "How to declare a string variable",
       options: {
         a: 'String x = "Hello World"',
         b: 'new "String" = Hello World',
@@ -239,34 +252,27 @@ const questions = {
   ],
 };
 
-
-
 let currentQuestionIndex = 0;
 let score = 0;
 let timerInterval;
-let category;
-document.addEventListener("DOMContentLoaded", function () {
-  initializeQuiz();
-});
-
 
 function startQuiz(selectedCategory) {
-  console.log('Start quiz clicked for category:', selectedCategory);
+  console.log("Start quiz clicked for category:", selectedCategory);
   username = document.getElementById("username").value;
-  
+
   if (username.trim() === "") {
     alert("Please enter your name to start the quiz.");
     return;
   }
-  
-   category = selectedCategory;
+
+  category = selectedCategory;
   localStorage.setItem("username", username);
   localStorage.setItem("category", category);
+  window.location.href = "questions.html"; 
   loadQuestionsPage();
 }
-function initializeQuiz() {
-  loadQuestionsPage();
-}
+
+
 function loadQuestionsPage() {
   const categoryTitleElement = document.getElementById("category-title");
 
@@ -299,25 +305,47 @@ function displayQuestion() {
   startTimer();
 }
 
+
+
 function checkAnswer(button) {
   const selectedAnswer = button.innerText.trim().toLowerCase();
   const currentQuestion = getCurrentQuestion();
   const correctAnswer = currentQuestion.correctAnswer.toLowerCase();
 
   if (selectedAnswer === correctAnswer) {
-    score++;
+    score++; // Increment by the index of the current question
+    console.log("Score updated:", score);
+    button.style.backgroundColor = "green";
+  } else {
+    button.style.backgroundColor = "red";
+  }
+  const correctButton = Array.from(
+    document.getElementsByClassName("options")
+  ).find((btn) => btn.innerText.trim().toLowerCase() === correctAnswer);
+  if (correctButton) {
+    correctButton.style.backgroundColor = "green";
+  } else {
+    button.style.backgroundColor = "red";
   }
 
-  disableOptions();
+  disableOptionsExceptSelected(button);
   clearInterval(timerInterval);
 
   document.getElementById("nextBtn").disabled = false;
+  updateScore();
 }
 
-function disableOptions() {
+function updateScore() {
+  const scoreElement = document.getElementById("score");
+  scoreElement.innerText = `${score} / 10`;
+}
+
+function disableOptionsExceptSelected(selectedButton) {
   const optionButtons = document.getElementsByClassName("options");
   for (let i = 0; i < optionButtons.length; i++) {
-    optionButtons[i].disabled = true;
+    if (optionButtons[i] !== selectedButton) {
+      optionButtons[i].disabled = true;
+    }
   }
 }
 
@@ -325,15 +353,21 @@ function getCurrentQuestion() {
   const currentCategoryQuestions = questions[category];
   return currentCategoryQuestions[currentQuestionIndex];
 }
-
 function nextQuestion() {
   currentQuestionIndex++;
   if (currentQuestionIndex < 10) {
     enableOptions();
     displayQuestion();
+    resetTimer(); // Reset the timer for the new question
   } else {
     alert(`Quiz completed!\nYour score: ${score}/10`);
     resetQuiz();
+  }
+}
+function enableOptions() {
+  const optionButtons = document.getElementsByClassName("options");
+  for (let i = 0; i < optionButtons.length; i++) {
+    optionButtons[i].disabled = false;
   }
 }
 
@@ -344,8 +378,35 @@ function resetQuiz() {
   document.getElementById("username").value = "";
   document.getElementById("category-title").innerText = "";
   document.getElementById("printQuestion").innerText = "";
-  document.getElementById("optionsContainer").innerHTML = "";
+  document.getElementById("optionsContainer").innerHTML = "";  
   clearInterval(timerInterval);
+  updateScore();
+}
+
+function startTimer() {
+  const timerElement = document.getElementById("timer");
+  let seconds = 15;
+  timerElement.innerText = seconds;
+
+  timerInterval = setInterval(function () {
+    seconds--;
+    timerElement.innerText = seconds;
+
+    if (seconds <= 0) {
+      clearInterval(timerInterval);
+      enableOptions();
+      document.getElementById("nextBtn").disabled = false;
+      // Add the logic to move to the next question without counting as a right answer
+      currentQuestionIndex++;
+      if (currentQuestionIndex < 10) {
+        displayQuestion();
+        resetTimer(); // Reset the timer for the new question
+      } else {
+        alert(`Quiz completed!\nYour score: ${score}/10`);
+        resetQuiz();
+      }
+    }
+  }, 1000);
 }
 
 function resetTimer() {
@@ -353,17 +414,7 @@ function resetTimer() {
   timerElement.innerText = "15";
 }
 
-function startTimer() {
-  const timerElement = document.getElementById("timer");
-  let seconds = 15;
-  timerInterval = setInterval(function () {
-    seconds--;
-    timerElement.innerText = seconds;
+// DISPLAY THE RESULT OF THE QUIZ...... link file with result.html
 
-    if (seconds <= 0) {
-      clearInterval(timerInterval);
-      disableOptions();
-      document.getElementById("nextBtn").disabled = false;
-    }
-  }, 1000);
-}
+
+
