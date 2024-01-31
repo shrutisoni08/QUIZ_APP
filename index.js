@@ -1,18 +1,27 @@
+// FOR LOAD THE DOM
+// WAIT FOR THE DOM TO BE FULLY LOADED BEFORE EXECUTING THE CODE.
 document.addEventListener("DOMContentLoaded", function () {
+//  INITIALIZE THE QUIZ BY LOADING QUESTIONS AND DISPLAYING RESULTS.
   initializeQuiz();
 });
+
+//  INITIALIZE THE QUIZ BY LOADING QUESTIONS AND DISPLAYING RESULTS.
 function initializeQuiz() {
   loadQuestionsPage();
+  displayResult();
 }
 
+// RETRIVE USERNAME AND CATEGORY FROM LOCAL STARAGE.
 let username = localStorage.getItem("username");
 let category = localStorage.getItem("category");
 
+//  IF THERE IS NO USERNAME OR CATEGORY, SHOW ALERT AND REDIRECT TO HOME PAGE.
 if (!username || !category) {
   window.location.href = "index.html";
 }
-
+// DEFINE THE QUIZ QUESTIONS FOR THREE CATEGORIES.
 const questions = {
+  // FOR HTML:
   HTML: [
     {
       question: "What does HTML stand for?",
@@ -81,13 +90,13 @@ const questions = {
       options: [
         "Site cookies",
         "Browser security",
-        "Brower settings",
+        "Browser settings",
         "Cookies",
       ],
       correctAnswer: "Browser settings",
     },
   ],
-
+  // FOR CSS:
   CSS: [
     {
       question: "What does CSS stand for?",
@@ -103,12 +112,12 @@ const questions = {
       question:
         "Which of the following is the correct styntax to add the external stylesheet in CSS?",
       options: [
-        '<style src = QuizBuzz.css>',
-        '<style src = "QuizBuzz.css">',
-        '<stylesheet>QuizBuzz.css</stylesheet>',
-        '<link rel="stylesheet" type="quiz/css" href="QuizBuzz.css">',
+        `<style src = QuizBuzz.css>`,
+        `<style src = "QuizBuzz.css">`,
+        `<stylesheet>QuizBuzz.css</stylesheet>`,
+        `<link rel="stylesheet" type="quiz/css" href="QuizBuzz.css">`,
       ],
-      correctAnswer: `<link rel="stylesheet" type="quiz/css" href="QuizBuzz.css"> `,
+      correctAnswer: `<link rel="stylesheet" type="quiz/css" href="QuizBuzz.css">`,
     },
     {
       question:
@@ -181,7 +190,7 @@ const questions = {
       correctAnswer: "All of the above",
     },
   ],
-
+  // FOR JAVASCRIPT:
   JavaScript: [
     {
       question: "Which operator is used to assign values?",
@@ -217,7 +226,7 @@ const questions = {
         "JavaScript Only Notation",
         "JavaScript Online Notation",
       ],
-      checkAnswer: "Javascript Object Notation",
+      correctAnswer: "Javascript Object Notation",
     },
     {
       question: 'What is the value of x? var x = typeof "abc"',
@@ -241,21 +250,24 @@ const questions = {
     },
     {
       question: "How to declare a string variable",
-      options: {
-        a: 'String x = "Hello World"',
-        b: 'new "String" = Hello World',
-        c: 'let x = "Hello World"',
-        d: 'x = "Hello World"',
-      },
+      options: [
+         'String x = "Hello World"',
+         'new "String" = Hello World',
+         'let x = "Hello World"',
+         'x = "Hello World"',
+      ],
       correctAnswer: 'let x = "Hello World"',
     },
   ],
 };
 
+// INITIALIZE QUIZ VARIABLES
 let currentQuestionIndex = 0;
 let score = 0;
 let timerInterval;
 
+// START THE QUIZ 
+// REDIRECT THE USER TO questions.html PAGE.
 function startQuiz(selectedCategory) {
   console.log("Start quiz clicked for category:", selectedCategory);
   username = document.getElementById("username").value;
@@ -272,7 +284,7 @@ function startQuiz(selectedCategory) {
   loadQuestionsPage();
 }
 
-
+// LOAD THE QUESTION PAGE AND DISPLAY THE CURRENT QUESTION ON questions.html PAGE.
 function loadQuestionsPage() {
   const categoryTitleElement = document.getElementById("category-title");
 
@@ -284,6 +296,7 @@ function loadQuestionsPage() {
   }
 }
 
+// DISPLAY THE CURRENT QUESTIONS AND OPTIONS ON questions.html PAGE.
 function displayQuestion() {
   const currentQuestion = getCurrentQuestion();
   const printQuestionElement = document.getElementById("printQuestion");
@@ -296,7 +309,7 @@ function displayQuestion() {
   currentQuestion.options.forEach((option, index) => {
     const optionButton = document.createElement("button");
     optionButton.innerText = option;
-    optionButton.classList.add("options"); // Add a class for styling or event handling
+    optionButton.classList.add("options");
     optionButton.onclick = () => checkAnswer(optionButton);
     optionsContainer.appendChild(optionButton);
   });
@@ -305,9 +318,13 @@ function displayQuestion() {
   startTimer();
 }
 
-
-
+// CHECK THE ANSWER OF USER CLICKING AN OPTION BUTTON
 function checkAnswer(button) {
+  if (button.disabled) {
+    // Return if the button is already disabled (preventing multiple clicks)
+    return;
+  }
+
   const selectedAnswer = button.innerText.trim().toLowerCase();
   const currentQuestion = getCurrentQuestion();
   const correctAnswer = currentQuestion.correctAnswer.toLowerCase();
@@ -319,9 +336,11 @@ function checkAnswer(button) {
   } else {
     button.style.backgroundColor = "red";
   }
+
   const correctButton = Array.from(
     document.getElementsByClassName("options")
   ).find((btn) => btn.innerText.trim().toLowerCase() === correctAnswer);
+
   if (correctButton) {
     correctButton.style.backgroundColor = "green";
   } else {
@@ -332,14 +351,16 @@ function checkAnswer(button) {
   clearInterval(timerInterval);
 
   document.getElementById("nextBtn").disabled = false;
+  button.disabled = true; // Disable the selected button
   updateScore();
 }
-
+// UPDATING AND DISPLAY THE SCORE WHEN USER SELECTS THE CORRECT ANSWER
 function updateScore() {
   const scoreElement = document.getElementById("score");
   scoreElement.innerText = `${score} / 10`;
 }
 
+// DISABLE ALL THE OPTIONS EXCEPT THE SELECTED ONE.
 function disableOptionsExceptSelected(selectedButton) {
   const optionButtons = document.getElementsByClassName("options");
   for (let i = 0; i < optionButtons.length; i++) {
@@ -348,22 +369,12 @@ function disableOptionsExceptSelected(selectedButton) {
     }
   }
 }
-
+// RETRIVE THE CURRENT QUESTION FROM THE QUESTIONS OBJECT.
 function getCurrentQuestion() {
   const currentCategoryQuestions = questions[category];
   return currentCategoryQuestions[currentQuestionIndex];
 }
-function nextQuestion() {
-  currentQuestionIndex++;
-  if (currentQuestionIndex < 10) {
-    enableOptions();
-    displayQuestion();
-    resetTimer(); // Reset the timer for the new question
-  } else {
-    alert(`Quiz completed!\nYour score: ${score}/10`);
-    resetQuiz();
-  }
-}
+// ENABLE ALL ANSWER OPTIONS.
 function enableOptions() {
   const optionButtons = document.getElementsByClassName("options");
   for (let i = 0; i < optionButtons.length; i++) {
@@ -371,6 +382,7 @@ function enableOptions() {
   }
 }
 
+// RESET ALL THE QUIZ ELEMENT AND QUIZ VARIABLES
 function resetQuiz() {
   currentQuestionIndex = 0;
   score = 0;
@@ -383,6 +395,7 @@ function resetQuiz() {
   updateScore();
 }
 
+// START THE TIMER COUNTDOWN
 function startTimer() {
   const timerElement = document.getElementById("timer");
   let seconds = 15;
@@ -409,12 +422,49 @@ function startTimer() {
   }, 1000);
 }
 
+// RESET THE TIMER TO ITS DEFAULT VALUE OF 15 SECONDS
 function resetTimer() {
   const timerElement = document.getElementById("timer");
   timerElement.innerText = "15";
 }
+// PROCEED TO THE NEXT QUESTION WHEN THE USER CLICKS ON 'NEXT' BUTTON OR FINISH THE QUIZ.
+function nextQuestion() {
+  currentQuestionIndex++;
+  if (currentQuestionIndex < 10) {
+    enableOptions();
+    displayQuestion();
+    resetTimer(); // Reset the timer for the new question
+  } else {
+    clearInterval(timerInterval); // Clear the timer interval
+    localStorage.setItem("score", score); // Save the score to local storage
+    window.location.href = "result.html"; // Redirect to result.html
+  }
+}
+// DISPLAY THE QUIZ RESULT ON THE result.html PAGE
+function displayResult() {
+  const resultElement = document.getElementById("username");
+  const totalScoreElement = document.getElementById("total_score");
+  const rightAnswerElement = document.getElementById("right_answer");
+  const wrongAnswerElement = document.getElementById("wrong_answer");
+  const totalPercentElement = document.getElementById("total_percent");
 
-// DISPLAY THE RESULT OF THE QUIZ...... link file with result.html
+  const username = localStorage.getItem("username");
+  const score = localStorage.getItem("score");
 
+  const totalQuestions = 10; // Assuming there are 10 questions in each quiz
 
+  resultElement.innerText = username;
+  totalScoreElement.innerText = `${score} / ${totalQuestions}`;
+  rightAnswerElement.innerText = score;
+  wrongAnswerElement.innerText = totalQuestions - score;
+  totalPercentElement.innerText = `${((score / totalQuestions) * 100).toFixed(2)}%`;
+}
 
+// REDIRESCT TO THE HOME PAGE
+function goToHomePage(){
+  window.location.href="index.html"
+}
+// RESTART THE QUIZ BY REDIRESCT TO THE HOME PAGE
+function restartTheQuiz(){
+  window.location.href="index.html"
+}
