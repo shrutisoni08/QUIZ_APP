@@ -21,14 +21,6 @@ body{
     justify-content: center;
     gap: 3rem;
 }
-/* .btns > a> button{
-    width: 10rem;
-    height: 2.5rem;
-    margin-bottom: 2rem;
-    font-size: 1.3rem;
-    font-weight: 600;
-    letter-spacing: .2rem;
-} */
 .btns > button{
     width: 10rem;
     height: 2.5rem;
@@ -36,4 +28,30 @@ body{
     font-size: 1.3rem;
     font-weight: 600;
     letter-spacing: .2rem;
+}
+
+/* MEDIA QUERIES */
+@media only screen and (max-width: 768px){
+    .main_container>h1{
+        font-size: 1.7rem;
+    }
+    .btns > button{
+        width: 8rem;
+        height: 2rem;
+        font-size: 1rem;
+        font-weight: 700;
+    }
+}
+
+@media only screen and (max-width: 425px){
+    .main_container>h1{
+        font-size: 1rem;
+        margin-top:  1rem;
+    }
+    .btns > button{
+        width: 8rem;
+        height: 2rem;
+        font-size: 1rem;
+        font-weight: 700;
+    }
 }
